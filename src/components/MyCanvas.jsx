@@ -3,91 +3,14 @@ import { Canvas } from '@react-three/fiber';
 
 import { OrbitControls, Html } from '@react-three/drei';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, createRef, useMemo } from 'react';
 import gsap from 'gsap';
+
+import planetsArray from './PlanetArray';
 // const config = { fov: 75, position: [0, 0, 500] };
 
 const pointsArray = new Float32Array(5000 * 3);
-const planetsArray = [
-	{
-		key: 'first',
-		index: 1,
-		name: 'Mercury',
-		distanceFromSun: 579, // in 100 kilometers
-		acceleration: 0.037, // in 100 m/s^2
-		mass: 3.3011e21, // in 100 kilograms
-		radius: 24.397, // in 100 kilometers
-	},
-	{
-		key: 'second',
-		index: 2,
-		name: 'Venus',
-		distanceFromSun: 1082,
-		acceleration: 0.0887,
-		mass: 4.8675e22,
-		radius: 60.518,
-	},
-	{
-		key: 'third',
 
-		index: 3,
-		name: 'Earth',
-		distanceFromSun: 1496,
-		acceleration: 0.0981,
-		mass: 5.97237e22,
-		radius: 63.71,
-	},
-	{
-		key: 'fourth',
-
-		index: 4,
-		name: 'Mars',
-		distanceFromSun: 2279,
-		acceleration: 0.0371,
-		mass: 6.4171e21,
-		radius: 33.99,
-	},
-	{
-		key: 'fifth',
-
-		index: 5,
-		name: 'Jupiter',
-		distanceFromSun: 7785,
-		acceleration: 0.2479,
-		mass: 1.8982e25,
-		radius: 714.92,
-	},
-	{
-		key: 'sixth',
-
-		index: 6,
-		name: 'Saturn',
-		distanceFromSun: 1434,
-		acceleration: 0.1044,
-		mass: 5.6834e24,
-		radius: 602.68,
-	},
-	{
-		key: 'seventh',
-
-		index: 7,
-		name: 'Uranus',
-		distanceFromSun: 2871,
-		acceleration: 0.0869,
-		mass: 8.681e23,
-		radius: 255.59,
-	},
-	{
-		key: 'eighth',
-
-		index: 8,
-		name: 'Neptune',
-		distanceFromSun: 4495,
-		acceleration: 0.1115,
-		mass: 1.02413e24,
-		radius: 247.64,
-	},
-];
 // let isOnCanvas = false;
 const size = 5000;
 for (let index = 0; index < size; index += 3) {
@@ -99,8 +22,14 @@ export default function MyCanvas() {
 	let [camera, setCamera] = useState(null);
 	const [animate, setAnimate] = useState(true);
 	const [activePlanet, setActivePlanet] = useState(null);
-	const planetRefArray = new Array(8);
-	planetRefArray[0] = useRef();
+	// const planetRefArray = new Array(8);
+	// const planetRefArray = Array.from({ length: 9 }, () => useRef());
+	const planetRefArray = useMemo(
+		() => Array.from({ length: 9 }, () => createRef()),
+		[],
+	);
+
+	/* 	planetRefArray[0] = useRef();
 	planetRefArray[1] = useRef();
 	planetRefArray[2] = useRef();
 
@@ -111,7 +40,7 @@ export default function MyCanvas() {
 	planetRefArray[6] = useRef();
 	planetRefArray[7] = useRef();
 	planetRefArray[8] = useRef();
-
+ */
 	const canvasRef = useRef();
 
 	let fact = Math.PI * 2;
@@ -120,8 +49,8 @@ export default function MyCanvas() {
 		if (animate) {
 			planetRefArray.forEach((planet) => {
 				if (planet.current) {
-					const planetPosition = planet.current.position;
-							const f =
+					/* 	const planetPosition = planet.current.position;
+					const f =
 						planet.current.factor *
 						planet.current.acceleration *
 						100;
@@ -131,7 +60,7 @@ export default function MyCanvas() {
 
 					planetPosition.setX(x);
 
-					planetPosition.setY(y);
+					planetPosition.setY(y); */
 					// const active = activePlanet?.uuid == planet.current.uuid;
 					/* if (active) {
 						console.log(active);
@@ -155,7 +84,7 @@ export default function MyCanvas() {
 				onClick={(e) => {
 					setActivePlanet(null);
 
-					// camera.position.set([0, 0, 200]);
+					// camera?.position.set([0, 0, 200]);
 				}}
 				// ref={canvasRef}
 				performance={{ min: 0.3, max: 0.4 }}
@@ -169,8 +98,6 @@ export default function MyCanvas() {
 					setCamera(state.camera);
 					camera?.position.set([0, 0, 200]);
 				}}>
-				{/* <PerspectiveCamera  ref={canvasRef} position={[0,150,500]} near={25}/> */}
-
 				<OrbitControls minZoom={0.4} />
 
 				<points>
@@ -198,7 +125,8 @@ export default function MyCanvas() {
 							<group key={planet.key}>
 								<mesh
 									onClick={(e) => {
-										const current = planetRefArray[index].current;
+										const current =
+											planetRefArray[index].current;
 
 										setActivePlanet(current);
 
@@ -210,10 +138,12 @@ export default function MyCanvas() {
 											]);
 
 											camera.position.setY([
-												current.position.y ,
+												current.position.y,
 											]);
 											camera.position.setZ([
-												current.position.z + 5,
+												current.position.z +
+													5 +
+													current.radius / 100,
 											]);
 										}
 									}}
