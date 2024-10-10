@@ -1,13 +1,14 @@
+/* eslint-disable react/no-unknown-property */
 import { useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 
 export default function Sun(props) {
 	const group = useRef();
-	const { nodes, materials } = useGLTF('/Planets-3d/00sun.glb');
+	const { nodes, materials } = useGLTF('/Planets-3d/SUN.glb');
 
 	return (
 		<group ref={group} {...props} scale={1.2}>
-			<group >
+			<group>
 				<mesh
 					geometry={nodes.UnstableStarCore_1_0.geometry}
 					material={materials.material}
@@ -23,4 +24,4 @@ export default function Sun(props) {
 	);
 }
 
-useGLTF.preload('/Planets-3d/00sun.glb');
+useGLTF.preload('/Planets-3d/SUN.glb');
