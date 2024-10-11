@@ -34,7 +34,7 @@ function Github() {
 
 	console.log(stringArr);
 	return (
-		<div className="bg-orange-200" ref={ref}>
+		<div className="bg-orange-200 p-4 m-4 w-96" ref={ref}>
 			MY github page info
 			{stringArr.map((e, index) => (
 				<h2 key={index}> {e}</h2>

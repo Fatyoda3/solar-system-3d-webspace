@@ -28,6 +28,7 @@ export default forwardRef(function Saturn(
 			position={position}
 			ref={ref}
 			onClick={() => {
+				
 				const current = ref.current;
 
 				if (camera) {
