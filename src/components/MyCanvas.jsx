@@ -15,7 +15,7 @@ sound.play();
 sound.loop = true;
 sound.autoplay = true;
 sound.volume = 0.1;
-console.log(sound);
+// console.log(sound);
 
 window.addEventListener('keypress', (e) => {
 	if (e.key == 'm' && sound.muted) {
@@ -97,7 +97,7 @@ export default function MyCanvas() {
 	}
 
 	return (
-		<>
+		<div className="canvas-wrap">
 			<Canvas
 				performance={{ min: 0.3, max: 0.4 }}
 				camera={{
@@ -231,6 +231,6 @@ export default function MyCanvas() {
 					<ambientLight />
 				</Suspense>
 			</Canvas>
-		</>
+		</div>
 	);
 }
