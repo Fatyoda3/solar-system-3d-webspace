@@ -6,12 +6,14 @@ import {
 } from 'react-router-dom';
 
 const checkActive = ({ isActive }) =>
-	isActive ? '  text-green-400  font-semibold p-2 m-1 shadow-md animate-bounce' : 'p-2 m-1';
+	isActive
+		? '  text-green-400  font-semibold p-2 m-1 shadow-md animate-bounce '
+		: 'p-2 m-1 hover:shadow-lg';
 
 export default function Header() {
 	return (
 		<>
-			<nav className=" bg-white  p-2 m-2 lg:text-2xl md:text-xl text-xl sm:text-xl flex justify-around   ">
+			<nav className=" bg-white  p-2 m-2 lg:text-2xl md:text-xl text-xl sm:text-xl flex justify-around ">
 				<NavLink to={'/'} className={checkActive}>
 					Home
 				</NavLink>

@@ -1,6 +1,6 @@
 import React from 'react';
 import MyCanvas from './components/MyCanvas';
-import { Header, Github } from './components';
+import { Header, Github, Discord } from './components';
 
 import { Route, createRoutesFromChildren } from 'react-router';
 import {
@@ -61,7 +61,7 @@ const router = createBrowserRouter([
 
 	{
 		path: '/github',
-	
+
 		element: (
 			<>
 				<Header />
@@ -72,6 +72,19 @@ const router = createBrowserRouter([
 					<h1>hello</h1>
 
 					<Github />
+				</div>
+			</>
+		),
+	},
+
+	{
+		path: '/discord',
+
+		element: (
+			<>
+				<Header />
+				<div className=" bg-white text-pretty">
+					<Discord />
 				</div>
 			</>
 		),

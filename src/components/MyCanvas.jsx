@@ -9,21 +9,21 @@ import Sun from './Sun';
 import StarField from './StarField';
 import Saturn from './Saturn';
 
-const sound = new Audio('./sounds/one.mp3');
-sound.preload = 'auto';
-sound.play();
-sound.loop = true;
-sound.autoplay = true;
-sound.volume = 0.1;
+// const sound = new Audio('./sounds/one.mp3');
+// sound.preload = 'auto';
+// sound.play();
+// sound.loop = true;
+// sound.autoplay = true;
+// sound.volume = 0.1;
 // console.log(sound);
-
+/* 
 window.addEventListener('keypress', (e) => {
 	if (e.key == 'm' && sound.muted) {
 		sound.muted = false;
 	} else if (e.key == 'm' && !sound.muted) {
 		sound.muted = true;
 	}
-});
+}); */
 // react function component
 export default function MyCanvas() {
 	const [camera, setCamera] = useState(null);
