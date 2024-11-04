@@ -2,136 +2,41 @@
 import { useState, createRef, useMemo } from 'react';
 import { Suspense } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, Html, Float } from '@react-three/drei';
+import { OrbitControls, Html } from '@react-three/drei';
 import planetsArray from '../constants/PlanetArray';
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 import Sun from './Sun';
 import StarField from './StarField';
 import Saturn from './Saturn';
-
-import { Header, Github, Discord } from './index';
-import { Route, Link, useLocation } from 'wouter';
+import gsap from 'gsap';
+// import { Github, Discord } from './index';
+import Header from './Home/Header';
+// import { Route, Link, useLocation } from 'wouter';
 import { Stars } from '@react-three/drei';
-import { useEnvironment, Environment } from '@react-three/drei';
-// const sound = new Audio('./sounds/one.mp3');
-// sound.preload = 'auto';
-// sound.play();
-// sound.loop = true;
-// sound.autoplay = true;
-// sound.volume = 0.1;
-// console.log(sound);
-/* 
+import { Environment } from '@react-three/drei';
+const sound = new Audio('./sounds/one.mp3');
+sound.preload = 'auto';
+sound.play();
+sound.loop = true;
+sound.autoplay = true;
+sound.volume = 0.1;
+console.log(sound);
+
 window.addEventListener('keypress', (e) => {
 	if (e.key == 'm' && sound.muted) {
 		sound.muted = false;
 	} else if (e.key == 'm' && !sound.muted) {
 		sound.muted = true;
 	}
-}); */
-/* const router = createBrowserRouter([
-	{
-		path: '/',
-		element: (
-			<>
-				<MyCanvas>
-					<Header />
+});
 
-					<div className=" bg-white text-pretty">
-						<h1>hellow</h1>
-						<h1>ajdfal</h1>
-						<h1>adhjfgal</h1>
-						<h1>jlakdjf</h1>
-						<h1>jaldjfa</h1>
-					</div>
-				</MyCanvas>
-			</>
-		),
-	},
-
-	// when i click a cross X  button it should hide every ui element
-	//and only display the r3f canvas
-
-	{
-		path: '/About',
-		element: (
-			<>
-				<MyCanvas>
-					<Header />
-
-					<div className=" bg-white text-pretty">
-						<h1>hello</h1>
-					</div>
-				</MyCanvas>
-			</>
-		),
-	},
-
-	{
-		path: '/contact-me',
-		element: (
-			<>
-				<MyCanvas>
-					<Header />
-
-					<div className=" bg-white text-pretty">
-						<h1>hello</h1>
-						<h1>hello</h1>
-						<h1>hello</h1>
-						<h1>hello</h1>
-					</div>
-				</MyCanvas>
-			</>
-		),
-	},
-
-	//https://api.github.com/users/Fatyoda3
-
-	{
-		path: '/github',
-
-		element: (
-			<>
-				<MyCanvas>
-					<Header />
-
-					<div className=" bg-white text-pretty">
-						<h1>hello</h1>
-						<h1>hello</h1>
-						<h1>hello</h1>
-						<h1>hello</h1>
-
-						<Github />
-					</div>
-				</MyCanvas>
-			</>
-		),
-	},
-
-	{
-		path: '/discord',
-
-		element: (
-			<>
-				<MyCanvas>
-					<Header />
-					<div className=" bg-white text-pretty">
-						<Discord />
-					</div>
-				</MyCanvas>
-			</>
-		),
-	},
-]);
- */
 // react function component
 
-const checkActive = ({ isActive = true }) =>
-	isActive
-		? '  text-green-400  font-semibold p-4 m-1 shadow-md animate-bounce '
-		: 'p-2 m-1 hover:shadow-lg';
+// const checkActive = '  text-green-400  font-semibold p-4 m-2 shadow-md  ';
+
 export default function MyCanvas() {
 	const [camera, setCamera] = useState(null);
-	const [aP, setAP] = useState(null);
+	const [aP, setAP] = useState(true);
 
 	const planetRefArray = useMemo(
 		() => Array.from({ length: 9 }, () => createRef()),
@@ -178,219 +83,236 @@ export default function MyCanvas() {
 
 	return (
 		<div className="canvas-wrap">
-			<Canvas
-				performance={{ min: 0.3, max: 0.4 }}
-				camera={{
-					fov: 90,
-					near: 0.1,
-					far: 2000,
-					position: [0, 0, 200],
-				}}
-				onCreated={(state) => {
-					setCamera(state.camera);
-					camera?.position.set([0, 0, 200]);
-					animate();
-				}}>
-				{/* <Float> */}
-				<Environment
-					/* files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/evening_road_01_2k.hdr"
+			{!aP && (
+				<button
+					className={
+						'bg-white text-gray-700 p-4 m-2 text-center sticky top-2 z-30 '
+					}
+					onClick={() => {
+						setAP((aP) => !aP);
+
+						gsap.to(camera.position, {
+							duration: 2,
+							z: 200,
+							delay: 0.3,
+							ease: 'circ.in',
+						});
+						// camera.position.set([0,0,200]);// problem with this is that it's not giving a vector-3 so undefined occurs
+
+						console.log(camera.position);
+					}}>
+					X
+				</button>
+			)}
+			{aP && (
+				<div className="bg-gray-800 rounded-md p-4 m-4 w-max ">
+					<Header />
+				</div>
+			)}
+			{
+				<Canvas
+					performance={{ min: 0.3, max: 0.4 }}
+					camera={{
+						fov: 90,
+						near: 0.1,
+						far: 2000,
+						position: [0, 0, 200],
+					}}
+					onCreated={(state) => {
+						setCamera(state.camera);
+						camera?.position.set([0, 0, 200]);
+						animate();
+					}}>
+					{/* <Float> */}
+					<Environment
+						/* files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/evening_road_01_2k.hdr"
 					ground={{ height: 5, radius: 500, scale: 1400 }} */
-					backgroundIntensity={0}
-					backgroundBlurriness={1}
-					environmentIntensity={0}
-					ground={{ height: 100, radius: 500, scale: 1400 }}
-					resolution={256}
-					// preset="night"
-					files={'/hdrMap.jpg'}
-					background={true}
-				/>
-
-				<Stars
-					radius={100}
-					depth={50}
-					count={5000}
-					factor={4}
-					saturation={0}
-					fade
-					speed={1}
-				/>
-				<group>
-					<mesh
-						rotation={[Math.PI / 2, 0, Math.PI / 2]}
-						position={[0, 100, 0]}>
-						<torusGeometry args={[65, 15, 12]} />
-						<meshPhysicalMaterial
-							envMapIntensity={25}
-							/* metalness={0.9} */
-							roughness={0.2}
-							transmission={1}
-							thickness={8}
-							/* color={0xff00ff} */
-						/>
-
-						{
-							<Html scale={5} position={[50, 5, 125]}>
-								<div className="bg-gray-50 rounded-md p-4 m-4 w-96">
-									<Link to={'/'} className={checkActive}>
-										Home
-									</Link>
-
-									<Link
-										to={'/github'}
-										className={checkActive}>
-										Github
-									</Link>
-									<Link
-										to={'/discord'}
-										className={checkActive}>
-										Discord
-									</Link>
-									<Link to={'/about'} className={checkActive}>
-										About
-									</Link>
-
-									<Route path="/">
-										<h2 className="p-4 m-4">
-											jack is here{' '}
-										</h2>
-									</Route>
-
-									<Route path="/github">
-										<Github />
-									</Route>
-									<Route path="/discord">
-										<Discord />
-									</Route>
-									<Route path="/discord">
-										{/* <About /> */}
-									</Route>
-								</div>
-							</Html>
-						}
-					</mesh>
-				</group>
-				{/* </Float> */}
-				<Suspense>
-					<ambientLight intensity={0.2} />
-					<StarField />
-					<OrbitControls minZoom={0.4} />
-
-					{/*THE SUN IS HERE */}
-
-					<Sun />
-					<directionalLight
-						args={[0xffffff, 5]}
-						position={[0, 0, -1]}
-						rotateX={Math.PI * 2}
+						backgroundIntensity={0}
+						backgroundBlurriness={1}
+						environmentIntensity={0}
+						ground={{ height: 100, radius: 500, scale: 1400 }}
+						resolution={256}
+						// preset="night"
+						files={'/hdrMap.jpg'}
+						background={true}
 					/>
 
-					{/* planets are here */}
-
+					<Stars
+						radius={100}
+						depth={50}
+						count={5000}
+						factor={4}
+						saturation={0}
+						fade
+						speed={1}
+					/>
 					<group>
-						{planetsArray.map((planet, index) => {
-							if (planet.name == 'Saturn')
-								return (
-									<group key={planet.key}>
-										<Saturn
-											radius={planet.radius}
-											ref={planetRefArray[index]}
-											scale={0.01}
-											position={[
-												-10 * index +
-													planet.radius / 100 +
-													15,
-												index === 4
-													? planet.radius / 100 + 25
-													: -5 * index +
-													  planet.radius / 100 +
-													  15,
-												index === 4
-													? planet.distanceFromSun /
-															1000 +
-													  planet.radius / 100 +
-													  15
-													: planet.distanceFromSun /
-															100 +
-													  planet.radius / 100 +
-													  15,
-											]}
-											camera={camera}
-										/>
-									</group>
-								);
-							else
-								return (
-									<group key={planet.key}>
-										<mesh
-											onClick={() => {
-												setAP(true);
-												const current =
-													planetRefArray[index]
-														.current;
-
-												if (camera) {
-													camera.position.set(
-														current.position.x,
-														current.position.y,
-														current.position.z +
-															current.radius /
-																100 +
-															5,
-													);
-												}
-											}}
-											acceleration={planet.acceleration}
-											radius={planet.radius}
-											ref={planetRefArray[index]}
-											position={[
-												-10 * index +
-													planet.radius / 100 +
-													15,
-												index === 4
-													? planet.radius / 100 + 25
-													: -5 * index +
-													  planet.radius / 100 +
-													  15,
-												index === 4
-													? planet.distanceFromSun /
-															1000 +
-													  planet.radius / 100 +
-													  15
-													: planet.distanceFromSun /
-															100 +
-													  planet.radius / 100 +
-													  15,
-											]}>
-											<sphereGeometry
-												args={[
-													planet.radius > 200
-														? planet.radius / 100
-														: planet.radius / 25,
-													25,
-													25,
-												]}
-											/>
-
-											<meshStandardMaterial
-												map={colorMap[planet.index - 1]}
-											/>
-											<Html
-												distanceFactor={
-													planet.radius < 200
-														? planet.radius / 2
-														: planet.radius / 20
-												}
-												className="text-black rounded-3xl p-2 bg-white text-2xl select-none">
-												{planet.name}
-											</Html>
-										</mesh>
-									</group>
-								);
-						})}
+						<mesh
+							onClick={() => setAP(true)}
+							rotation={[Math.PI / 2, 0, Math.PI / 2]}
+							position={[0, 100, 0]}>
+							<torusGeometry args={[65, 15, 12]} />
+							<meshPhysicalMaterial
+								envMapIntensity={25}
+								/* metalness={0.9} */
+								roughness={0.2}
+								transmission={1}
+								thickness={8}
+								/* color={0xff00ff} */
+							/>
+						</mesh>
 					</group>
-					<ambientLight />
-				</Suspense>
-			</Canvas>
+					{/* </Float> */}
+					<Suspense>
+						<ambientLight intensity={0.2} />
+						{/* <StarField /> */}
+						<OrbitControls minZoom={0.4} />
+
+						{/*THE SUN IS HERE */}
+
+						<Sun />
+						<directionalLight
+							args={[0xffffff, 5]}
+							position={[0, 0, -1]}
+							rotateX={Math.PI * 2}
+						/>
+
+						{/* planets are here */}
+
+						<group>
+							{planetsArray.map((planet, index) => {
+								if (planet.name == 'Saturn')
+									return (
+										<group key={planet.key}>
+											<Saturn
+												radius={planet.radius}
+												ref={planetRefArray[index]}
+												scale={0.01}
+												position={[
+													-10 * index +
+														planet.radius / 100 +
+														15,
+													index === 4
+														? planet.radius / 100 +
+														  25
+														: -5 * index +
+														  planet.radius / 100 +
+														  15,
+													index === 4
+														? planet.distanceFromSun /
+																1000 +
+														  planet.radius / 100 +
+														  15
+														: planet.distanceFromSun /
+																100 +
+														  planet.radius / 100 +
+														  15,
+												]}
+												camera={camera}
+												aP={aP}
+												setAP={setAP}
+											/>
+										</group>
+									);
+								else
+									return (
+										<group key={planet.key}>
+											<mesh
+												onClick={() => {
+													setAP(false);
+													const current =
+														planetRefArray[index]
+															.current;
+
+													if (camera) {
+														gsap.to(
+															camera.position,
+															{
+																duration: 1,
+																z:
+																	current
+																		.position
+																		.z +
+																	current.radius /
+																		100 +
+																	5,
+																x: current
+																	.position.x,
+																y: current
+																	.position.y,
+																delay: 0.1,
+																ease: 'circ.in',
+															},
+														);
+														/* 	camera.position.set(
+														
+															
+															
+														); */
+													}
+												}}
+												acceleration={
+													planet.acceleration
+												}
+												radius={planet.radius}
+												ref={planetRefArray[index]}
+												position={[
+													-10 * index +
+														planet.radius / 100 +
+														15,
+													index === 4
+														? planet.radius / 100 +
+														  25
+														: -5 * index +
+														  planet.radius / 100 +
+														  15,
+													index === 4
+														? planet.distanceFromSun /
+																1000 +
+														  planet.radius / 100 +
+														  15
+														: planet.distanceFromSun /
+																100 +
+														  planet.radius / 100 +
+														  15,
+												]}>
+												<sphereGeometry
+													args={[
+														planet.radius > 200
+															? planet.radius /
+															  100
+															: planet.radius /
+															  25,
+														25,
+														25,
+													]}
+												/>
+
+												<meshStandardMaterial
+													map={
+														colorMap[
+															planet.index - 1
+														]
+													}
+												/>
+												<Html
+													distanceFactor={
+														planet.radius < 200
+															? planet.radius / 2
+															: planet.radius / 20
+													}
+													className="text-black rounded-3xl p-2 bg-white text-2xl select-none">
+													{planet.name}
+												</Html>
+											</mesh>
+										</group>
+									);
+							})}
+						</group>
+						<ambientLight />
+					</Suspense>
+				</Canvas>
+			}
 		</div>
 	);
 }

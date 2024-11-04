@@ -2,9 +2,9 @@
 /* eslint-disable react/no-unknown-property */
 import { useGLTF, Html } from '@react-three/drei';
 import { forwardRef } from 'react';
-
+import gsap from 'gsap';
 export default forwardRef(function Saturn(
-	{ scale, position, camera, radius },
+	{ scale, position, camera, radius, setAP, aP },
 	ref,
 ) {
 	const { nodes, materials } = useGLTF('./Planets-3d/saturn.glb');
@@ -28,15 +28,19 @@ export default forwardRef(function Saturn(
 			position={position}
 			ref={ref}
 			onClick={() => {
-				
 				const current = ref.current;
+				setAP((aP) => !aP);
 
 				if (camera) {
-					camera?.position.set(
-						current?.position.x + 1,
-						current?.position.y + 1,
-						current?.position.z + radius / 100 + 15,
-					);
+					gsap.to(camera.position, {
+						duration: 1,
+						z: current.position.z + radius / 100 + 20,
+						x: current.position.x + 5,
+						y: current.position.y,
+						delay: 0.1,
+						ease: 'circ.in',
+					});
+					console.log(camera.position);
 				}
 			}}>
 			<mesh
