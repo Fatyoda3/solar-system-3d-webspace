@@ -1,8 +1,11 @@
 import { Route, Link } from 'wouter';
 import Github from './Github';
 import Contact from './Contact';
+
 import About from './About';
+
 import Projects from './Projects';
+
 import Home from './Home';
 
 const checkActive = (active) =>
